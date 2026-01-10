@@ -739,7 +739,7 @@
             toast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
             openModal(key) { const m = document.getElementById('info-modal'); document.getElementById('modal-title').innerText = (key==='quem_somos'?'QUEM SOMOS':key==='carreiras'?'CARREIRAS':key==='termos'?'TERMOS':'SUPORTE'); document.getElementById('modal-body').innerHTML = MODAL_CONTENT[key]||''; m.classList.add('active'); }
             closeModal() { document.getElementById('info-modal').classList.remove('active'); }
-            checkout() { if(this.state.cart.length === 0) return alert("Carrinho vazio!"); let msg = "*PEDIDO NEON AUTOMATIONS*\n\n"; let total = 0; this.state.cart.forEach(i => { total += i.price * i.qty; msg += `🔹 ${i.qty}x ${i.name} ${i.isDiscount?'[OFF]':''} | R$ ${(i.price*i.qty).toFixed(2)}\n`; }); msg += `\n*TOTAL: R$ ${total.toFixed(2)}*`; window.open(`https://wa.me/5511000000000?text=${encodeURIComponent(msg)}`, '_blank'); }
+            checkout() { if(this.state.cart.length === 0) return alert("Carrinho vazio!"); let msg = "*PEDIDO NEON AUTOMATIONS*\n\n"; let total = 0; this.state.cart.forEach(i => { total += i.price * i.qty; msg += `🔹 ${i.qty}x ${i.name} ${i.isDiscount?'[OFF]':''} | R$ ${(i.price*i.qty).toFixed(2)}\n`; }); msg += `\n*TOTAL: R$ ${total.toFixed(2)}*`; window.open(`https://wa.me/5511916072188?text=${encodeURIComponent(msg)}`, '_blank'); }
 
             setupBgCanvas() { const cvs = document.getElementById('canvas-bg'); const ctx = cvs.getContext('2d'); let w, h, particles = []; const resize = () => { w = cvs.width = window.innerWidth; h = cvs.height = window.innerHeight; }; window.addEventListener('resize', resize); resize(); class P { constructor() { this.reset(); } reset() { this.x = Math.random()*w; this.y = Math.random()*h; this.vx = (Math.random()-.5)*.5; this.vy = (Math.random()-.5)*.5; } update() { this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>w||this.y<0||this.y>h) this.reset(); } draw() { ctx.fillStyle='rgba(0,255,157,0.3)'; ctx.beginPath(); ctx.arc(this.x,this.y,1,0,Math.PI*2); ctx.fill(); } } for(let i=0; i<60; i++) particles.push(new P()); const anim = () => { ctx.clearRect(0,0,w,h); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); }; anim(); }
         }
@@ -748,3 +748,4 @@
     </script>
 </body>
 </html>
+

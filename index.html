@@ -1,751 +1,1590 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Loja oficial de automações Neon Auto. N8N, IA e Chatbots.">
-    <meta name="theme-color" content="#050505">
-    <title>Automações Inteligentes| Loja Epresarial APV</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Loja oficial de automações Neon Auto. N8N, IA e Chatbots.">
+  <meta name="theme-color" content="#050505">
+  <title>Automações Inteligentes| Loja Epresarial APV</title>
 
-    <style>
-        /* =========================================
-           1. DESIGN SYSTEM
-           ========================================= */
-        :root {
-            --primary: #00ff9d;        
-            --primary-dim: rgba(0, 255, 157, 0.1);
-            --secondary: #d500f9; /* Roxo mais forte e vibrante */
-            --secondary-glow: rgba(213, 0, 249, 0.4);
-            --gold: hsl(55, 100%, 50%);           
-            --bg-deep: #020203;
-            --bg-panel: rgba(15, 15, 20, 0.90);
-            --bg-header: rgba(5, 5, 8, 0.95);
-            --border: rgba(255, 255, 255, 0.12);
-            --glass: blur(12px);
-            --font-title: 'Orbitron', sans-serif;
-            --font-body: 'Rajdhani', sans-serif;
-            --sidebar-width: 280px;
-            --marquee-height: 40px;
-            --header-height: 70px;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;500;600;700&display=swap" rel="stylesheet">
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        html { scroll-behavior: smooth; }
+  <style>
+    /* =========================================
+       1. DESIGN SYSTEM
+       ========================================= */
+    :root {
+      --primary: #00ff9d;
+      --primary-dim: rgba(0, 255, 157, 0.1);
+      --secondary: #d500f9;
+      --secondary-glow: rgba(213, 0, 249, 0.4);
+      --gold: hsl(55, 100%, 50%);
+      --gold-dim: rgba(255, 215, 0, 0.12);
+      --alert: #ff3b3b;
 
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--bg-deep);
-            color: #f0f0f0;
-            font-family: var(--font-body);
-            font-weight: 500;
-            overflow-x: hidden;
-            padding-top: calc(var(--marquee-height) + var(--header-height) + 20px);
-        }
+      --bg-deep: #020203;
+      --bg-panel: rgba(15, 15, 20, 0.90);
+      --bg-header: rgba(5, 5, 8, 0.95);
+      --border: rgba(255, 255, 255, 0.12);
+      --glass: blur(12px);
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-deep); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+      --font-title: 'Orbitron', sans-serif;
+      --font-body: 'Rajdhani', sans-serif;
 
-        /* =========================================
-           2. BACKGROUND FX (MATRIX ROXO FORTE)
-           ========================================= */
-        #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.2; pointer-events: none; }
-        
-        /* Matrix Canvas - Aumentado Opacidade e Z-Index */
-        #matrix-canvas { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: -1; opacity: 0.4; /* Mais evidente */
-            pointer-events: none; 
-            mix-blend-mode: screen; /* Brilha mais no fundo escuro */
-        }
+      --sidebar-width: 280px;
+      --marquee-height: 40px;
+      --header-height: 70px;
+    }
 
-        .overlay-fx { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 10%, #000 140%); z-index: -1; pointer-events: none; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+    html { scroll-behavior: smooth; }
 
-        /* =========================================
-           3. HEADER & MARQUEE
-           ========================================= */
-        .marquee-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: var(--marquee-height);
-            background: var(--gold); color: #000; z-index: 2000;
-            display: flex; align-items: center; overflow: hidden; white-space: nowrap;
-            border-bottom: 2px solid #000; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
-        }
-        .marquee-content { display: inline-flex; animation: marquee 35s linear infinite; }
-        @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
-        .marquee-item { font-family: var(--font-title); font-weight: 900; font-size: 0.85rem; padding: 0 40px; display: flex; align-items: center; gap: 8px; }
-        .blink-icon { animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+    body {
+      margin: 0; padding: 0;
+      background-color: var(--bg-deep);
+      color: #f0f0f0;
+      font-family: var(--font-body);
+      font-weight: 500;
+      overflow-x: hidden;
+      padding-top: calc(var(--marquee-height) + var(--header-height) + 20px);
+    }
 
-        header {
-            position: fixed; top: var(--marquee-height); left: 0; width: 100%; height: var(--header-height);
-            z-index: 1000; background: var(--bg-header); backdrop-filter: var(--glass);
-            border-bottom: 1px solid var(--border); transition: top 0.3s; display: flex; align-items: center;
-        }
-        .header-wrapper { width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .brand-icon { width: 50px; height: 35px; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px var(--primary-dim); color: #fff; font-family: var(--font-title); font-weight: bold; }
-        .brand-text { font-family: var(--font-title); font-size: 1.4rem; font-weight: 900; color: #fff; letter-spacing: 2px; }
-        .brand-text span { color: var(--primary); }
+    /* =========================================
+       2. BACKGROUND FX
+       ========================================= */
+    #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; opacity: 0.2; pointer-events: none; }
+    #matrix-canvas {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1; opacity: 0.4;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
 
-        .search-complex { flex-grow: 1; max-width: 500px; margin: 0 20px; }
-        .search-input { width: 100%; padding: 10px 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 4px; color: #fff; font-family: var(--font-body); font-size: 1rem; transition: 0.3s; }
-        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-dim); }
+    .overlay-fx {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at center, transparent 10%, #000 140%);
+      z-index: -1; pointer-events: none;
+    }
 
-        .cart-btn-wrapper { position: relative; cursor: pointer; }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--primary); color: #000; font-family: var(--font-title); font-size: 0.7rem; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    /* =========================================
+       3. HEADER & MARQUEE
+       ========================================= */
+    .marquee-container {
+      position: fixed; top: 0; left: 0; width: 100%; height: var(--marquee-height);
+      background: var(--gold); color: #000; z-index: 2000;
+      display: flex; align-items: center; overflow: hidden; white-space: nowrap;
+      border-bottom: 2px solid #000; box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+    }
+    .marquee-content { display: inline-flex; animation: marquee 35s linear infinite; }
+    @keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }
+    .marquee-item {
+      font-family: var(--font-title); font-weight: 900; font-size: 0.85rem;
+      padding: 0 40px; display: flex; align-items: center; gap: 8px;
+    }
+    .blink-icon { animation: blink 1s infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
 
-        /* =========================================
-           4. MAIN LAYOUT
-           ========================================= */
-        .hero-section { max-width: 1600px; margin: 0 auto 30px auto; padding: 0 20px; }
-        .hero-wrapper { width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.5); height: 300px; }
-        .hero-img { width: 100%; height: 100%; object-fit: cover; }
+    header {
+      position: fixed; top: var(--marquee-height); left: 0; width: 100%; height: var(--header-height);
+      z-index: 1000; background: var(--bg-header); backdrop-filter: var(--glass);
+      border-bottom: 1px solid var(--border); transition: top 0.3s; display: flex; align-items: center;
+    }
+    .header-wrapper {
+      width: 100%; max-width: 1600px; margin: 0 auto; padding: 0 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 15px;
+    }
 
-        .app-container { display: flex; max-width: 1600px; margin: 0 auto; padding: 0 20px; gap: 30px; position: relative; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .brand-icon {
+      width: 50px; height: 35px; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 10px var(--primary-dim); color: #fff; font-family: var(--font-title); font-weight: bold;
+    }
+    .brand-text { font-family: var(--font-title); font-size: 1.4rem; font-weight: 900; color: #fff; letter-spacing: 2px; }
+    .brand-text span { color: var(--primary); }
 
-        aside.filters-panel {
-            width: var(--sidebar-width); flex-shrink: 0; background: var(--bg-panel); border: 1px solid var(--border);
-            border-radius: 8px; padding: 25px; height: fit-content; position: sticky; top: 130px;
-        }
-        .filter-title { font-family: var(--font-title); font-size: 0.9rem; color: var(--primary); margin-bottom: 12px; border-left: 3px solid var(--secondary); padding-left: 10px; text-transform: uppercase; }
-        .filter-options label { display: flex; align-items: center; margin-bottom: 8px; cursor: pointer; color: #aaa; transition: 0.2s; }
-        .filter-options label:hover { color: #fff; }
-        .custom-check { width: 16px; height: 16px; border: 1px solid #555; margin-right: 10px; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
-        input:checked + .custom-check { background: var(--primary); border-color: var(--primary); color: #000; }
-        input:checked + .custom-check::after { content: '✓'; font-size: 12px; font-weight: bold; }
+    .search-complex { flex-grow: 1; max-width: 500px; margin: 0 20px; }
+    .search-input {
+      width: 100%; padding: 10px 15px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 4px;
+      color: #fff; font-family: var(--font-body); font-size: 1rem; transition: 0.3s;
+    }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-dim); }
 
-        .catalog-grid { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; position: relative; z-index: 1; }
+    .cart-btn-wrapper { position: relative; cursor: pointer; }
+    .cart-badge {
+      position: absolute; top: -5px; right: -5px; background: var(--primary); color: #000;
+      font-family: var(--font-title); font-size: 0.7rem; font-weight: 800;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
 
-        /* =========================================
-           5. PRODUCT CARDS
-           ========================================= */
-        .product-card {
-            background: rgba(15, 15, 20, 0.7); border: 1px solid var(--border); border-radius: 8px; 
-            overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s ease; position: relative;
-            backdrop-filter: blur(5px);
-        }
-        .product-card:hover { transform: translateY(-5px); border-color: var(--secondary); box-shadow: 0 0 25px var(--secondary-glow); }
-        
-        .card-header { height: 160px; background: #050505; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
-        .node-icon { font-size: 3.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); position: relative; z-index: 5; }
-        
-        .card-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; background: rgba(15,15,20,0.9); }
-        .prod-cat { font-size: 0.7rem; color: var(--secondary); text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
-        .prod-title { font-family: var(--font-title); font-size: 1.1rem; color: #fff; margin: 0 0 10px 0; line-height: 1.3; }
-        .prod-desc { font-size: 0.9rem; color: #8892b0; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .tech-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 15px; }
-        .tag { font-size: 0.65rem; background: rgba(255,255,255,0.05); padding: 3px 6px; border-radius: 2px; color: #aaa; border: 1px solid rgba(255,255,255,0.05); }
+    .mobile-toggle{
+      display:none;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: #fff;
+      border-radius: 6px;
+      width: 42px;
+      height: 42px;
+      cursor:pointer;
+    }
+    .mobile-toggle:hover{ border-color: var(--primary); box-shadow: 0 0 12px var(--primary-dim); }
 
-        .card-footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 15px; }
-        .price-display { font-family: var(--font-title); font-size: 1.2rem; color: #fff; font-weight: 700; }
-        .btn-add-cart { background: transparent; border: 1px solid var(--primary); color: var(--primary); width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; transition: 0.3s; }
-        .btn-add-cart:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-dim); }
+    /* =========================================
+       4. MAIN LAYOUT
+       ========================================= */
+    .hero-section { max-width: 1600px; margin: 0 auto 30px auto; padding: 0 20px; }
+    .hero-wrapper {
+      width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
+      position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.5); height: 300px;
+    }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* =========================================
-           6. CART & QUEUE UPSELL SYSTEM
-           ========================================= */
-        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 2500; opacity: 0; pointer-events: none; transition: 0.3s; }
-        .cart-overlay.open { opacity: 1; pointer-events: auto; }
-        
-        .cart-sidebar { 
-            position: fixed; top: 0; right: -450px; width: 100%; max-width: 450px; height: 100%; 
-            background: #08080b; border-left: 1px solid var(--primary); display: flex; flex-direction: column; 
-            z-index: 2501; transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1); box-shadow: -10px 0 40px rgba(0,0,0,0.8); 
-        }
-        .cart-overlay.open .cart-sidebar { right: 0; }
+    .app-container { display: flex; max-width: 1600px; margin: 0 auto; padding: 0 20px; gap: 30px; position: relative; }
 
-        .cart-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); }
-        .cart-content { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        
-        .cart-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 6px; border: 1px solid transparent; }
-        .cart-item-top { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .cart-item h4 { margin: 0; font-size: 0.95rem; color: #fff; }
-        .item-remove { color: var(--alert); cursor: pointer; background: none; border: none; font-size: 0.8rem; text-decoration: underline; }
-        .cart-controls { display: flex; align-items: center; justify-content: space-between; }
-        .qty-wrapper { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 4px; }
-        .qty-btn { width: 24px; height: 24px; background: rgba(255,255,255,0.1); border: none; color: #fff; cursor: pointer; }
-        
-        /* -- UPSELL AREA -- */
-        .upsell-section { 
-            margin-top: 20px; border-top: 1px dashed var(--gold); padding-top: 15px; display: none; 
-            /* Para garantir que sempre haja espaço */
-            min-height: 200px;
-        }
-        .upsell-section.active { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    aside.filters-panel {
+      width: var(--sidebar-width); flex-shrink: 0; background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: 8px; padding: 25px; height: fit-content; position: sticky; top: 130px;
+    }
+    .filter-title {
+      font-family: var(--font-title); font-size: 0.9rem; color: var(--primary);
+      margin-bottom: 12px; border-left: 3px solid var(--secondary); padding-left: 10px; text-transform: uppercase;
+    }
+    .filter-options label { display: flex; align-items: center; margin-bottom: 8px; cursor: pointer; color: #aaa; transition: 0.2s; }
+    .filter-options label:hover { color: #fff; }
+    .custom-check { width: 16px; height: 16px; border: 1px solid #555; margin-right: 10px; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
+    input:checked + .custom-check { background: var(--primary); border-color: var(--primary); color: #000; }
+    input:checked + .custom-check::after { content: '✓'; font-size: 12px; font-weight: bold; }
 
-        .upsell-card { 
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), transparent); border: 1px solid rgba(255, 215, 0, 0.3); 
-            padding: px; border-radius: 6px; margin-bottom: 40px; position: relative; 
-            transition: all 0.3s ease;
-        }
-        
-        .upsell-header { color: var(--gold); font-family: var(--font-title); font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; }
-        .upsell-btn { 
-            background: var(--gold-dim); border: 1px solid var(--gold); color: var(--gold); 
-            width: 100%; padding: 8px; font-weight: bold; cursor: pointer; margin-top: 8px; transition: 0.2s;
-        }
-        .upsell-btn:hover { background: var(--gold); color: #000; }
+    .catalog-grid { flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; position: relative; z-index: 1; }
 
-        .cart-footer { padding: 20px; background: #000; border-top: 1px solid var(--border); }
-        .btn-checkout { width: 100%; background: var(--primary-dim); border: 1px solid var(--primary); color: var(--primary); padding: 15px; font-family: var(--font-title); font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; margin-top: 10px; }
-        .btn-checkout:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-dim); }
+    /* =========================================
+       5. PRODUCT CARDS
+       ========================================= */
+    .product-card {
+      background: rgba(15, 15, 20, 0.7); border: 1px solid var(--border); border-radius: 8px;
+      overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s ease; position: relative;
+      backdrop-filter: blur(5px);
+    }
+    .product-card:hover { transform: translateY(-5px); border-color: var(--secondary); box-shadow: 0 0 25px var(--secondary-glow); }
 
-        /* =========================================
-           7. FOOTER, PAYMENTS & UTILS
-           ========================================= */
-        footer { background: #020202; border-top: 1px solid var(--border); padding: 40px 20px 80px 20px; margin-top: 40px; position: relative; }
-        .footer-grid { max-width: 1600px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
-        .footer-col h4 { color: #fff; font-family: var(--font-title); margin-bottom: 20px; border-left: 3px solid var(--primary); padding-left: 10px; }
-        .footer-links a { display: block; color: #888; text-decoration: none; margin-bottom: 8px; transition: 0.2s; cursor: pointer; }
-        .footer-links a:hover { color: var(--primary); padding-left: 5px; }
+    .card-header { height: 160px; background: #050505; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+    .node-icon { font-size: 3.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.1)); position: relative; z-index: 5; }
 
-        .payment-methods {
-            max-width: 1600px; margin: 30px auto 0 auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;
-        }
-        .pay-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .pay-icon {
-            width: 60px; height: 40px; border: 1px solid var(--border); border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(255,255,255,0.03); transition: 0.3s;
-        }
-        .pay-icon svg { width: 28px; height: 28px; fill: #aaa; transition: 0.3s; }
-        .pay-label { font-size: 0.75rem; color: #666; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .pay-item:hover .pay-icon { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-dim); }
-        .pay-item:hover .pay-icon svg { fill: #fff; }
-        .pay-item:hover .pay-label { color: var(--primary); }
+    .card-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; background: rgba(15,15,20,0.9); }
+    .prod-cat { font-size: 0.7rem; color: var(--secondary); text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
+    .prod-title { font-family: var(--font-title); font-size: 1.1rem; color: #fff; margin: 0 0 10px 0; line-height: 1.3; }
+    .prod-desc { font-size: 0.9rem; color: #8892b0; margin-bottom: 12px; line-height: 1.35; }
+    .tech-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .tag { font-size: 0.65rem; background: rgba(255,255,255,0.05); padding: 3px 6px; border-radius: 2px; color: #aaa; border: 1px solid rgba(255,255,255,0.05); }
 
-        /* Modais */
-        .modal-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
-            z-index: 3000; display: none; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
-        }
-        .modal-container.active { display: flex; opacity: 1; }
-        .modal-box {
-            background: #08080a; border: 1px solid var(--primary); width: 90%; max-width: 600px; max-height: 80vh;
-            display: flex; flex-direction: column; box-shadow: 0 0 30px rgba(0,255,157,0.15); border-radius: 8px;
-        }
-        .modal-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .modal-title { font-family: var(--font-title); color: var(--primary); margin: 0; font-size: 1.2rem; }
-        .modal-close { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
-        .modal-body { padding: 25px; overflow-y: auto; color: #ccc; font-size: 0.95rem; line-height: 1.8; text-align: justify; }
+    .card-footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 15px; }
+    .price-display { font-family: var(--font-title); font-size: 0.95rem; color: #fff; font-weight: 700; line-height: 1.2; }
+    .btn-add-cart {
+      background: transparent; border: 1px solid var(--primary); color: var(--primary);
+      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
+      border-radius: 4px; cursor: pointer; transition: 0.3s;
+    }
+    .btn-add-cart:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-dim); }
 
-        /* SCROLL TOP BUTTON (RESTAURADO) */
-        .scroll-top {
-            position: fixed; bottom: 30px; left: 30px; /* Esquerda para não brigar com o float do whats */
-            width: 45px; height: 45px; background: rgba(0,0,0,0.8); border: 1px solid var(--primary);
-            color: var(--primary); border-radius: 8px; cursor: pointer; 
-            display: flex; align-items: center; justify-content: center; z-index: 800;
-            font-size: 1.2rem; transition: 0.3s; opacity: 0.7;
-        }
-        .scroll-top:hover { opacity: 1; box-shadow: 0 0 15px var(--primary-dim); transform: translateY(-5px); }
+    /* =========================================
+       5.1 CTA WHATS (BOTÃO GRANDE COM LUZ PASSANDO)
+       ========================================= */
+    .btn-whats-cta{
+      width: 100%;
+      margin-top: 12px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
 
-        .float-btn { position: fixed; bottom: 30px; right: 30px; background: rgba(5, 10, 5, 0.95); border: 1px solid var(--primary); color: var(--primary); padding: 12px 25px; border-radius: 50px; font-family: var(--font-title); font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 12px; z-index: 900; box-shadow: 0 0 20px rgba(0, 255, 157, 0.2); backdrop-filter: blur(5px); }
-        .status-led { width: 10px; height: 10px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 10px #00ff00; animation: pulse 1.5s infinite; }
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--primary); color: #000; padding: 10px 25px; border-radius: 4px; font-weight: bold; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 3000; }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+      padding: 12px 14px;
+      border-radius: 8px;
 
-        @media (max-width: 900px) {
-            .app-container { flex-direction: column; }
-            .mobile-toggle { display: block; }
-            .search-complex { display: none; }
-            aside.filters-panel { position: fixed; top: 0; left: -100%; width: 85%; height: 100vh; z-index: 2600; background: #08080a; transition: 0.3s ease; overflow-y: auto; }
-            aside.filters-panel.active { left: 0; }
-            .scroll-top { bottom: px; left: 20px; } /* Ajuste mobile */
-        }
-    </style>
+      background: linear-gradient(180deg, rgba(0,255,157,0.14), rgba(0,255,157,0.06));
+      border: 1px solid rgba(0,255,157,0.45);
+      color: #bfffe6;
+
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+
+      cursor: pointer;
+      transition: 0.25s ease;
+      box-shadow: 0 0 18px rgba(0,255,157,0.12);
+      backdrop-filter: blur(6px);
+    }
+
+    .btn-whats-cta:hover{
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      color: #00150d;
+      background: linear-gradient(180deg, rgba(0,255,157,0.85), rgba(0,255,157,0.35));
+      box-shadow: 0 0 30px rgba(0,255,157,0.18);
+    }
+
+    .btn-whats-cta:active{
+      transform: translateY(0px);
+      box-shadow: 0 0 18px rgba(0,255,157,0.12);
+    }
+
+    .btn-whats-cta::before{
+      content:"";
+      position:absolute;
+      top:-40%;
+      left:-60%;
+      width: 40%;
+      height: 180%;
+      transform: rotate(20deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      filter: blur(0.5px);
+      opacity: 0.85;
+      animation: neonSweep 2.2s linear infinite;
+    }
+    @keyframes neonSweep{
+      0%   { left:-60%; }
+      100% { left:130%; }
+    }
+
+    .btn-whats-cta .wa-dot{
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 12px rgba(0,255,157,0.9);
+      animation: pulseDot 1.6s ease-in-out infinite;
+    }
+    @keyframes pulseDot{
+      0%,100% { transform: scale(1); opacity: 0.9; }
+      50%     { transform: scale(1.35); opacity: 1; }
+    }
+
+    /* =========================================
+       5.2 NOVA SEÇÃO: DÚVIDAS (FAQ + FORM)
+       ========================================= */
+    .faq-section{
+      max-width: 1600px;
+      margin: 30px auto 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .faq-shell{
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(15, 15, 20, 0.78);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
+
+    .faq-top{
+      padding: 22px 22px 12px 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display:flex;
+      align-items:flex-end;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .faq-title{
+      margin:0;
+      font-family: var(--font-title);
+      font-weight: 900;
+      letter-spacing: 1px;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .faq-sub{
+      margin: 6px 0 0 0;
+      color: #a5b0d6;
+      font-size: 0.95rem;
+      line-height: 1.3;
+      max-width: 820px;
+    }
+    .faq-badge{
+      font-family: var(--font-title);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      color: #000;
+      background: var(--primary);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-weight: 900;
+      box-shadow: 0 0 18px rgba(0,255,157,0.22);
+      white-space: nowrap;
+    }
+
+    .faq-content{
+      display:grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      padding: 18px 22px 22px 22px;
+    }
+
+    .faq-list{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 220px;
+    }
+
+    .faq-item{
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 10px;
+      background: rgba(0,0,0,0.25);
+      padding: 14px 14px;
+      cursor: pointer;
+      transition: 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .faq-item:hover{
+      border-color: rgba(213,0,249,0.45);
+      box-shadow: 0 0 18px rgba(213,0,249,0.16);
+      transform: translateY(-2px);
+    }
+    .faq-q{
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .faq-q small{
+      color: var(--primary);
+      font-family: var(--font-title);
+      font-weight: 900;
+      font-size: 0.75rem;
+      opacity: 0.95;
+    }
+    .faq-hint{
+      margin-top: 6px;
+      color: #8892b0;
+      font-size: 0.9rem;
+      line-height: 1.25;
+    }
+
+    .faq-form{
+      border: 1px solid rgba(0,255,157,0.25);
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(0,255,157,0.08), rgba(0,0,0,0.2));
+      padding: 16px;
+      box-shadow: 0 0 18px rgba(0,255,157,0.08);
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .faq-form h3{
+      margin: 0 0 6px 0;
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      color: #bfffe6;
+      text-transform: uppercase;
+    }
+    .faq-field{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .faq-label{
+      color: #a9b4da;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .faq-input, .faq-textarea{
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      transition: 0.25s ease;
+    }
+    .faq-textarea{
+      min-height: 110px;
+      resize: vertical;
+    }
+    .faq-input:focus, .faq-textarea:focus{
+      border-color: rgba(0,255,157,0.55);
+      box-shadow: 0 0 14px rgba(0,255,157,0.12);
+    }
+
+    .faq-send{
+      margin-top: 6px;
+      border: 1px solid rgba(0,255,157,0.55);
+      background: rgba(0,255,157,0.12);
+      color: var(--primary);
+      font-family: var(--font-title);
+      font-weight: 900;
+      letter-spacing: 1px;
+      padding: 12px 12px;
+      border-radius: 10px;
+      cursor:pointer;
+      transition: 0.25s ease;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+    .faq-send:hover{
+      background: rgba(0,255,157,0.9);
+      color: #00150d;
+      box-shadow: 0 0 22px rgba(0,255,157,0.16);
+      transform: translateY(-1px);
+    }
+    .faq-send::before{
+      content:"";
+      position:absolute;
+      top:-40%;
+      left:-60%;
+      width: 40%;
+      height: 180%;
+      transform: rotate(20deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      opacity: 0.85;
+      animation: neonSweep 2.2s linear infinite;
+    }
+
+    .faq-note{
+      margin: 8px 0 0 0;
+      color: #8892b0;
+      font-size: 0.85rem;
+      line-height: 1.25;
+    }
+    .faq-note b{ color:#fff; }
+
+    @media (max-width: 1000px){
+      .faq-content{ grid-template-columns: 1fr; }
+    }
+
+    /* =========================================
+       5.3 POP-UP DE DÚVIDAS (MODAL TECNOLÓGICO)
+       ========================================= */
+    .faq-modal-overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(10px);
+      z-index: 3200;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+    }
+    .faq-modal-overlay.active{ display:flex; }
+
+    .faq-modal{
+      width: 100%;
+      max-width: 720px;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      background: rgba(6, 6, 10, 0.92);
+      border: 1px solid rgba(0,255,157,0.35);
+      box-shadow: 0 0 40px rgba(0,255,157,0.10), 0 0 40px rgba(213,0,249,0.08);
+    }
+
+    /* borda iluminada com “movimento sutil” */
+    .faq-modal::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius: 14px;
+      padding: 2px;
+      background: conic-gradient(
+        from 0deg,
+        rgba(0,255,157,0.75),
+        rgba(213,0,249,0.55),
+        rgba(255,215,0,0.45),
+        rgba(0,255,157,0.75)
+      );
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: faqSpin 5.5s linear infinite;
+      opacity: 0.75;
+      pointer-events:none;
+    }
+    @keyframes faqSpin{
+      0%{ transform: rotate(0deg); }
+      100%{ transform: rotate(360deg); }
+    }
+
+    /* aura sutil em volta */
+    .faq-modal::after{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background: radial-gradient(circle at 20% 10%, rgba(0,255,157,0.10), transparent 45%),
+                  radial-gradient(circle at 80% 30%, rgba(213,0,249,0.10), transparent 50%),
+                  radial-gradient(circle at 60% 85%, rgba(255,215,0,0.08), transparent 55%);
+      filter: blur(10px);
+      opacity: 0.9;
+      pointer-events:none;
+    }
+
+    .faq-modal-inner{
+      position: relative;
+      z-index: 2;
+      display:flex;
+      flex-direction: column;
+      max-height: 82vh;
+    }
+
+    .faq-modal-header{
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255,255,255,0.02);
+    }
+    .faq-modal-title{
+      margin:0;
+      font-family: var(--font-title);
+      color: #fff;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      line-height: 1.25;
+    }
+    .faq-modal-close{
+      background: none;
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #fff;
+      border-radius: 10px;
+      width: 44px;
+      height: 40px;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-size: 1.1rem;
+    }
+    .faq-modal-close:hover{
+      border-color: rgba(0,255,157,0.55);
+      box-shadow: 0 0 16px rgba(0,255,157,0.12);
+      transform: translateY(-1px);
+    }
+
+    .faq-modal-body{
+      padding: 18px;
+      overflow: auto;
+      color: #c7d0f0;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    /* =========================================
+       6. CART & QUEUE UPSELL SYSTEM
+       ========================================= */
+    .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 2500; opacity: 0; pointer-events: none; transition: 0.3s; }
+    .cart-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .cart-sidebar {
+      position: fixed; top: 0; right: -450px; width: 100%; max-width: 450px; height: 100%;
+      background: #08080b; border-left: 1px solid var(--primary); display: flex; flex-direction: column;
+      z-index: 2501; transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1); box-shadow: -10px 0 40px rgba(0,0,0,0.8);
+    }
+    .cart-overlay.open .cart-sidebar { right: 0; }
+
+    .cart-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); }
+    .cart-content { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+
+    .cart-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 6px; border: 1px solid transparent; }
+    .cart-item-top { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .cart-item h4 { margin: 0; font-size: 0.95rem; color: #fff; }
+    .item-remove { color: var(--alert); cursor: pointer; background: none; border: none; font-size: 0.8rem; text-decoration: underline; }
+    .cart-controls { display: flex; align-items: center; justify-content: space-between; }
+    .qty-wrapper { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 4px; }
+    .qty-btn { width: 24px; height: 24px; background: rgba(255,255,255,0.1); border: none; color: #fff; cursor: pointer; }
+
+    .upsell-section { margin-top: 20px; border-top: 1px dashed var(--gold); padding-top: 15px; display: none; min-height: 200px; }
+    .upsell-section.active { display: block; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .upsell-card {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), transparent);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .upsell-header { color: var(--gold); font-family: var(--font-title); font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; }
+    .upsell-btn {
+      background: var(--gold-dim); border: 1px solid var(--gold); color: var(--gold);
+      width: 100%; padding: 8px; font-weight: bold; cursor: pointer; margin-top: 8px; transition: 0.2s;
+    }
+    .upsell-btn:hover { background: var(--gold); color: #000; }
+
+    .cart-footer { padding: 20px; background: #000; border-top: 1px solid var(--border); }
+    .btn-checkout { width: 100%; background: var(--primary-dim); border: 1px solid var(--primary); color: var(--primary); padding: 15px; font-family: var(--font-title); font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; margin-top: 10px; }
+    .btn-checkout:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-dim); }
+
+    /* =========================================
+       7. FOOTER, PAYMENTS & UTILS
+       ========================================= */
+    footer { background: #020202; border-top: 1px solid var(--border); padding: 40px 20px 80px 20px; margin-top: 40px; position: relative; }
+    .footer-grid { max-width: 1600px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+    .footer-col h4 { color: #fff; font-family: var(--font-title); margin-bottom: 20px; border-left: 3px solid var(--primary); padding-left: 10px; }
+    .footer-links a { display: block; color: #888; text-decoration: none; margin-bottom: 8px; transition: 0.2s; cursor: pointer; }
+    .footer-links a:hover { color: var(--primary); padding-left: 5px; }
+
+    .payment-methods {
+      max-width: 1600px; margin: 30px auto 0 auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;
+    }
+    .pay-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .pay-icon {
+      width: 60px; height: 40px; border: 1px solid var(--border); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.03); transition: 0.3s;
+    }
+    .pay-icon svg { width: 28px; height: 28px; fill: #aaa; transition: 0.3s; }
+    .pay-label { font-size: 0.75rem; color: #666; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .pay-item:hover .pay-icon { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-dim); }
+    .pay-item:hover .pay-icon svg { fill: #fff; }
+    .pay-item:hover .pay-label { color: var(--primary); }
+
+    /* Modais */
+    .modal-container {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      z-index: 3000; display: none; justify-content: center; align-items: center;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-container.active { display: flex; opacity: 1; }
+    .modal-box {
+      background: #08080a; border: 1px solid var(--primary); width: 90%; max-width: 600px; max-height: 80vh;
+      display: flex; flex-direction: column; box-shadow: 0 0 30px rgba(0,255,157,0.15); border-radius: 8px;
+    }
+    .modal-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-title { font-family: var(--font-title); color: var(--primary); margin: 0; font-size: 1.2rem; }
+    .modal-close { background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+    .modal-body { padding: 25px; overflow-y: auto; color: #ccc; font-size: 0.95rem; line-height: 1.8; text-align: justify; }
+
+    /* SCROLL TOP BUTTON */
+    .scroll-top {
+      position: fixed; bottom: 30px; left: 30px;
+      width: 45px; height: 45px; background: rgba(0,0,0,0.8); border: 1px solid var(--primary);
+      color: var(--primary); border-radius: 8px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; z-index: 800;
+      font-size: 1.2rem; transition: 0.3s; opacity: 0.7;
+    }
+    .scroll-top:hover { opacity: 1; box-shadow: 0 0 15px var(--primary-dim); transform: translateY(-5px); }
+
+    .float-btn {
+      position: fixed; bottom: 30px; right: 30px; background: rgba(5, 10, 5, 0.95);
+      border: 1px solid var(--primary); color: var(--primary);
+      padding: 12px 25px; border-radius: 50px; font-family: var(--font-title); font-weight: 700;
+      text-decoration: none; display: flex; align-items: center; gap: 12px; z-index: 900;
+      box-shadow: 0 0 20px rgba(0, 255, 157, 0.2); backdrop-filter: blur(5px);
+    }
+    .status-led { width: 10px; height: 10px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 10px #00ff00; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.25); opacity: 1; } }
+
+    .toast {
+      position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--primary); color: #000; padding: 10px 25px; border-radius: 4px; font-weight: bold;
+      opacity: 0; transition: 0.3s; pointer-events: none; z-index: 3000;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 900px) {
+      .app-container { flex-direction: column; }
+      .mobile-toggle { display: block; }
+      .search-complex { display: none; }
+      aside.filters-panel {
+        position: fixed; top: 0; left: -100%; width: 85%; height: 100vh; z-index: 2600;
+        background: #08080a; transition: 0.3s ease; overflow-y: auto;
+      }
+      aside.filters-panel.active { left: 0; }
+      .scroll-top { bottom: 30px; left: 20px; }
+    }
+  </style>
 </head>
+
 <body>
+  <canvas id="canvas-bg"></canvas>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="overlay-fx"></div>
 
-    <canvas id="canvas-bg"></canvas>
-    
-    <canvas id="matrix-canvas"></canvas>
-    
-    <div class="overlay-fx"></div>
+  <div class="marquee-container">
+    <div class="marquee-content">
+      <div class="marquee-item"><span class="blink-icon">⚠️</span> ULTIMAS VAGAS</div>
+      <div class="marquee-item"><span class="blink-icon">🚀</span> 50% OFF</div>
+      <div class="marquee-item"><span class="blink-icon">⚡</span> WHATSAPP API</div>
+      <div class="marquee-item"><span class="blink-icon">🤖</span> GPT-4 TURBO</div>
+      <div class="marquee-item"><span class="blink-icon">⚠️</span> ULTIMAS VAGAS</div>
+      <div class="marquee-item"><span class="blink-icon">🚀</span> 50% OFF</div>
+      <div class="marquee-item"><span class="blink-icon">⚡</span> WHATSAPP API</div>
+      <div class="marquee-item"><span class="blink-icon">🤖</span> GPT-4 TURBO</div>
+    </div>
+  </div>
 
-    <div class="marquee-container">
-        <div class="marquee-content">
-            <div class="marquee-item"><span class="blink-icon">⚠️</span> ULTIMAS VAGAS</div>
-            <div class="marquee-item"><span class="blink-icon">🚀</span> 50% OFF</div>
-            <div class="marquee-item"><span class="blink-icon">⚡</span> WHATSAPP API</div>
-            <div class="marquee-item"><span class="blink-icon">🤖</span> GPT-4 TURBO</div>
-            <div class="marquee-item"><span class="blink-icon">⚠️</span> ULTIMAS VAGAS</div>
-            <div class="marquee-item"><span class="blink-icon">🚀</span> 50% OFF</div>
-            <div class="marquee-item"><span class="blink-icon">⚡</span> WHATSAPP API</div>
-            <div class="marquee-item"><span class="blink-icon">🤖</span> GPT-4 TURBO</div>
+  <header>
+    <div class="header-wrapper">
+      <button class="mobile-toggle" onclick="NeonStore.toggleFilters()">☰</button>
+      <a href="#" class="brand">
+        <div class="brand-icon">apv</div>
+        <span class="brand-text">aprovados<span></span></span>
+      </a>
+
+      <div class="search-complex">
+        <input type="text" class="search-input" id="search-input" placeholder="Buscar automação...">
+      </div>
+
+      <div class="cart-btn-wrapper" onclick="NeonStore.toggleCart()">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="2">
+          <path d="M9 20a1 1 0 1 0 0 2 1 1 0 1 0 0-2z"/>
+          <path d="M20 20a1 1 0 1 0 0 2 1 1 0 1 0 0-2z"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="cart-badge" id="cart-count">0</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-section">
+    <div class="hero-wrapper">
+      <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1600&auto=format&fit=crop" class="hero-img" alt="Banner Cyberpunk">
+      <div style="position:absolute; bottom:0; left:0; width:100%; padding:20px; background:linear-gradient(to top, #000, transparent);">
+        <h1 style="margin:0; font-family:var(--font-title); color:#fff;">AUTOMATIONS V.10</h1>
+        <p style="margin:0; color:var(--primary);">Soluções Enterprise para Escalar seu Negócio</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="app-container">
+    <aside class="filters-panel" id="sidebar-filters">
+      <div style="display:flex; justify-content:space-between; margin-bottom:20px;" class="mobile-toggle">
+        <h3 style="margin:0; color:#fff;">FILTROS</h3>
+        <button onclick="NeonStore.toggleFilters()" style="background:none; border:none; color:var(--primary); font-size:1.5rem;">✕</button>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-title">Categorias</div>
+        <div class="filter-options" id="filter-cats-container"></div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-title">Preço</div>
+        <div class="filter-options">
+          <label><input type="radio" name="price" value="all" checked hidden onchange="NeonStore.applyFilters()"><span class="custom-check"></span>Todos</label>
+          <label><input type="radio" name="price" value="low" hidden onchange="NeonStore.applyFilters()"><span class="custom-check"></span>Starter (&lt; 200)</label>
+          <label><input type="radio" name="price" value="mid" hidden onchange="NeonStore.applyFilters()"><span class="custom-check"></span>Pro (200 - 500)</label>
+          <label><input type="radio" name="price" value="high" hidden onchange="NeonStore.applyFilters()"><span class="custom-check"></span>Enterprise (&gt; 500)</label>
         </div>
+      </div>
+
+      <button onclick="NeonStore.resetFilters()" style="width:100%; padding:10px; background:rgba(255,255,255,0.1); color:#fff; border:none; cursor:pointer;">LIMPAR</button>
+    </aside>
+
+    <main class="catalog-grid" id="product-grid"></main>
+  </div>
+
+  <!-- ✅ NOVA SEÇÃO (não interfere nos cards nem no rodapé) -->
+  <section class="faq-section" id="duvidas">
+    <div class="faq-shell">
+      <div class="faq-top">
+        <div>
+          <h2 class="faq-title">DÚVIDAS RÁPIDAS</h2>
+          <p class="faq-sub">
+            Clique em uma pergunta para ver a resposta em um pop-up tecnológico.
+            Se a sua dúvida for outra, envie aqui embaixo — ela chega direto no seu WhatsApp.
+          </p>
+        </div>
+        <div class="faq-badge">SUPORTE NO WHATS</div>
+      </div>
+
+      <div class="faq-content">
+        <div class="faq-list" id="faq-list"></div>
+
+        <form class="faq-form" id="faq-form" autocomplete="on">
+          <h3>Envie sua pergunta</h3>
+
+          <div class="faq-field">
+            <div class="faq-label">Seu nome</div>
+            <input class="faq-input" id="faq-name" type="text" placeholder="Ex: João" required>
+          </div>
+
+          <div class="faq-field">
+            <div class="faq-label">Seu WhatsApp</div>
+            <input class="faq-input" id="faq-phone" type="tel" placeholder="Ex: (11) 99999-9999" required>
+          </div>
+
+          <div class="faq-field">
+            <div class="faq-label">Sua pergunta</div>
+            <textarea class="faq-textarea" id="faq-question" placeholder="Escreva sua dúvida..." required></textarea>
+          </div>
+
+          <button class="faq-send" type="submit">Enviar para o WhatsApp</button>
+          <p class="faq-note">
+            Ao enviar, salvamos <b>nome</b>, <b>telefone</b> e <b>data</b> automaticamente na planilha.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✅ POP-UP das dúvidas -->
+  <div class="faq-modal-overlay" id="faq-modal-overlay" aria-hidden="true">
+    <div class="faq-modal" role="dialog" aria-modal="true" aria-labelledby="faq-modal-title">
+      <div class="faq-modal-inner">
+        <div class="faq-modal-header">
+          <h3 class="faq-modal-title" id="faq-modal-title">Dúvida</h3>
+          <button class="faq-modal-close" type="button" onclick="NeonStore.closeFaqModal()">✕</button>
+        </div>
+        <div class="faq-modal-body" id="faq-modal-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-overlay" id="overlay" onclick="NeonStore.toggleCart()">
+    <aside class="cart-sidebar" onclick="event.stopPropagation()">
+      <div class="cart-header">
+        <h3 style="margin:0; font-family:var(--font-title); color:#fff;">SEUS PEDIDOS</h3>
+        <button onclick="NeonStore.toggleCart()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="cart-content" id="cart-content"></div>
+
+      <div class="upsell-section" id="upsell-area">
+        <div style="color:var(--gold); margin-bottom:10px; font-weight:bold; font-family:var(--font-title); display:flex; justify-content:space-between;">
+          <span>⚡ OFERTAS DINÂMICAS</span>
+          <span style="font-size:0.7rem; opacity:0.7">FILA ATIVA</span>
+        </div>
+        <div id="upsell-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+      </div>
+
+      <div class="cart-footer">
+        <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:bold; color:#fff; margin-bottom:15px;">
+          <span>TOTAL:</span>
+          <span id="cart-total" style="color:var(--primary);">R$ 0,00</span>
+        </div>
+        <button class="btn-checkout" onclick="NeonStore.checkout()">FINALIZAR NO WHATSAPP</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modal-container" id="info-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Título</h3>
+        <button class="modal-close" onclick="NeonStore.closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <button class="scroll-top" onclick="window.scrollTo(0,0)" title="Voltar ao topo">▲</button>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>SOBRE NÓS</h4>
+        <p style="color:#666; font-size:0.9rem;">Especialistas em automação inteligente. Transformamos processos manuais em fluxos digitais.</p>
+      </div>
+      <div class="footer-col">
+        <h4>LINKS RÁPIDOS</h4>
+        <div class="footer-links">
+          <a onclick="NeonStore.openModal('quem_somos')">Quem Somos</a>
+          <a onclick="NeonStore.openModal('carreiras')">Carreiras Tech</a>
+          <a onclick="NeonStore.openModal('termos')">Termos de Uso</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>SUPORTE</h4>
+        <div class="footer-links">
+          <a onclick="NeonStore.openModal('status')">Status do Sistema</a>
+          <a onclick="NeonStore.openModal('help')">Help Desk</a>
+          <a onclick="NeonStore.openModal('help')">contato</a>
+        </div>
+      </div>
     </div>
 
-    <header>
-        <div class="header-wrapper">
-            <button class="mobile-toggle" onclick="NeonStore.toggleFilters()">☰</button>
-            <a href="#" class="brand"><div class="brand-icon">apv</div><span class="brand-text">aprovados<span></span></span></a>
-            <div class="search-complex">
-                <input type="text" class="search-input" id="search-input" placeholder="Buscar automação...">
-            </div>
-            <div class="cart-btn-wrapper" onclick="NeonStore.toggleCart()">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="2"><path d="M9 20a1 1 0 1 0 0 2 1 1 0 1 0 0-2z"/><path d="M20 20a1 1 0 1 0 0 2 1 1 0 1 0 0-2z"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                <span class="cart-badge" id="cart-count">0</span>
-            </div>
+    <div class="payment-methods">
+      <div class="pay-item">
+        <div class="pay-icon" title="PIX">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2.5-4l-2-2 1.41-1.41L11 14.17l4.59-4.59L17 11l-6 6z"/></svg>
         </div>
-    </header>
+        <span class="pay-label">Pix</span>
+      </div>
 
-    <section class="hero-section">
-        <div class="hero-wrapper">
-            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1600&auto=format&fit=crop" class="hero-img" alt="Banner Cyberpunk">
-            <div style="position:absolute; bottom:0; left:0; width:100%; padding:20px; background:linear-gradient(to top, #000, transparent);">
-                <h1 style="margin:0; font-family:var(--font-title); color:#fff;">AUTOMATIONS V.10</h1>
-                <p style="margin:0; color:var(--primary);">Soluções Enterprise para Escalar seu Negócio</p>
-            </div>
+      <div class="pay-item">
+        <div class="pay-icon" title="Crédito">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
         </div>
-    </section>
+        <span class="pay-label">Crédito</span>
+      </div>
 
-    <div class="app-container">
-        <aside class="filters-panel" id="sidebar-filters">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px;" class="mobile-toggle">
-                <h3 style="margin:0; color:#fff;">FILTROS</h3>
-                <button onclick="NeonStore.toggleFilters()" style="background:none; border:none; color:var(--primary); font-size:1.5rem;">✕</button>
-            </div>
-            <div class="filter-section">
-                <div class="filter-title">Categorias</div>
-                <div class="filter-options" id="filter-cats-container"></div>
-            </div>
-            <div class="filter-section">
-                <div class="filter-title">Preço</div>
-                <div class="filter-options">
-                    <label><input type="radio" name="price" value="all" checked hidden onchange="NeonStore.applyFilters()"><span class="custom-check"></span>Todos</label>
-                    <label><input type="radio" name="price" value="low" hidden onchange="NeonStore.applyFilters()"><span class="custom-check"></span>Starter (< 200)</label>
-                    <label><input type="radio" name="price" value="mid" hidden onchange="NeonStore.applyFilters()"><span class="custom-check"></span>Pro (200 - 500)</label>
-                    <label><input type="radio" name="price" value="high" hidden onchange="NeonStore.applyFilters()"><span class="custom-check"></span>Enterprise (> 500)</label>
-                </div>
-            </div>
-            <button onclick="NeonStore.resetFilters()" style="width:100%; padding:10px; background:rgba(255,255,255,0.1); color:#fff; border:none; cursor:pointer;">LIMPAR</button>
-        </aside>
-
-        <main class="catalog-grid" id="product-grid"></main>
+      <div class="pay-item">
+        <div class="pay-icon" title="Débito">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm-1 14H5c-.55 0-1-.45-1-1v-5h16v5c0 .55-.45 1-1 1zm1-8H4V6h16v4z"/><path d="M6 14h2v2H6zm4 0h2v2h-2zm4 0h2v2h-2z"/></svg>
+        </div>
+        <span class="pay-label">Débito</span>
+      </div>
     </div>
 
-    <div class="cart-overlay" id="overlay" onclick="NeonStore.toggleCart()">
-        <aside class="cart-sidebar" onclick="event.stopPropagation()">
-            <div class="cart-header">
-                <h3 style="margin:0; font-family:var(--font-title); color:#fff;">SEUS PEDIDOS</h3>
-                <button onclick="NeonStore.toggleCart()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">✕</button>
-            </div>
-            <div class="cart-content" id="cart-content"></div>
-            
-            <div class="upsell-section" id="upsell-area">
-                <div style="color:var(--gold); margin-bottom:10px; font-weight:bold; font-family:var(--font-title); display:flex; justify-content:space-between;">
-                    <span>⚡ OFERTAS DINÂMICAS</span>
-                    <span style="font-size:0.7rem; opacity:0.7">FILA ATIVA</span>
-                </div>
-                <div id="upsell-list" style="display:flex; flex-direction:column; gap:10px;"></div>
-            </div>
-
-            <div class="cart-footer">
-                <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:bold; color:#fff; margin-bottom:15px;">
-                    <span>TOTAL:</span>
-                    <span id="cart-total" style="color:var(--primary);">R$ 0,00</span>
-                </div>
-                <button class="btn-checkout" onclick="NeonStore.checkout()">FINALIZAR NO WHATSAPP</button>
-            </div>
-        </aside>
+    <div style="text-align:center; color:#444; font-size:0.8rem; margin-top:20px; padding-top:20px;">
+      aprovados© 2026 • TODOS OS DIREITOS RESERVADOS
     </div>
+  </footer>
 
-    <div class="modal-container" id="info-modal">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modal-title">Título</h3>
-                <button class="modal-close" onclick="NeonStore.closeModal()">✕</button>
-            </div>
-            <div class="modal-body" id="modal-body"></div>
-        </div>
-    </div>
+  <a href="https://wa.me/5511916072188" target="_blank" class="float-btn"><div class="status-led"></div>RODRIGO ONLINE</a>
+  <div class="toast" id="toast">Item Adicionado!</div>
 
-    <button class="scroll-top" onclick="window.scrollTo(0,0)" title="Voltar ao topo">▲</button>
+  <script>
+    /**
+     * =========================================================
+     * ENGINE ENTERPRISE V10.0
+     * (NADA foi removido; apenas adicionado: seção de dúvidas + envio Whats + Apps Script)
+     * =========================================================
+     */
 
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4>SOBRE NÓS</h4>
-                <p style="color:#666; font-size:0.9rem;">Especialistas em automação inteligente. Transformamos processos manuais em fluxos digitais.</p>
-            </div>
-            <div class="footer-col">
-                <h4>LINKS RÁPIDOS</h4>
-                <div class="footer-links">
-                    <a onclick="NeonStore.openModal('quem_somos')">Quem Somos</a>
-                    <a onclick="NeonStore.openModal('carreiras')">Carreiras Tech</a>
-                    <a onclick="NeonStore.openModal('termos')">Termos de Uso</a>
-                </div>
-            </div>
-            <div class="footer-col">
-                <h4>SUPORTE</h4>
-                <div class="footer-links">
-                    <a onclick="NeonStore.openModal('status')">Status do Sistema</a>
-                    <a onclick="NeonStore.openModal('help')">Help Desk</a>
-                    <a onclick="NeonStore.openModal('help')">contato</a>
-                    
-                </div>
-            </div>
-        </div>
+    // ✅ CONFIG: cole aqui a URL do seu Google Apps Script (Web App)
+    // Exemplo: https://script.google.com/macros/s/AKfycbxxxxxxx/exec
+    const GOOGLE_SHEETS_WEBAPP_URL = "COLE_AQUI_A_URL_DO_SEU_WEB_APP";
 
-        <div class="payment-methods">
-            <div class="pay-item">
-                <div class="pay-icon" title="PIX">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2.5-4l-2-2 1.41-1.41L11 14.17l4.59-4.59L17 11l-6 6z"/></svg>
-                </div>
-                <span class="pay-label">Pix</span>
-            </div>
-            <div class="pay-item">
-                <div class="pay-icon" title="Crédito">
-                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
-                </div>
-                <span class="pay-label">Crédito</span>
-            </div>
-            <div class="pay-item">
-                <div class="pay-icon" title="Débito">
-                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm-1 14H5c-.55 0-1-.45-1-1v-5h16v5c0 .55-.45 1-1 1zm1-8H4V6h16v4z"/><path d="M6 14h2v2H6zm4 0h2v2h-2zm4 0h2v2h-2z"/></svg>
-                </div>
-                <span class="pay-label">Débito</span>
-            </div>
-        </div>
+    // ✅ NOVOS CARDS (mantidos do seu site)
+    const PRODUCTS_DB = [
+      {
+        id: 1,
+        name: "Atendente IA WhatsApp (GPT-4)",
+        desc: "✅ Responde em segundos 24/7<br>✅ Treinado com suas perguntas e respostas<br>✅ Qualifica e transfere pro humano<br><span style='color:#aaa'>Implantação (1x): <b style=\"color:#fff\">R$ 497</b></span>",
+        price: 297.00,
+        cat: "Agentes Inteligentes",
+        icon: "🤖",
+        tags: ["24/7", "NÃO PERDE LEAD", "HUMANO"]
+      },
+      {
+        id: 2,
+        name: "Agente de Agendamentos para Clínicas",
+        desc: "✅ Agenda no WhatsApp sem atrito<br>✅ Confirma + lembretes automáticos<br>✅ Encaixes + lista de espera<br><span style='color:#aaa'>Implantação (1x): <b style=\"color:#fff\">R$ 697</b></span>",
+        price: 397.00,
+        cat: "Agentes Inteligentes",
+        icon: "📆",
+        tags: ["REDUZ FALTAS", "AGENDA LOTADA", "LEMBRETES"]
+      },
+      {
+        id: 3,
+        name: "Agente de Agendamentos para Barbearias",
+        desc: "✅ Marca horário em 30s (serviço + barbeiro)<br>✅ Confirma e reagenda automático<br>✅ Cliente não fica no vácuo<br><span style='color:#aaa'>Implantação (1x): <b style=\"color:#fff\">R$ 397</b></span>",
+        price: 197.00,
+        cat: "Agentes Inteligentes",
+        icon: "🧠",
+        tags: ["MARCA EM 30s", "REAGENDA", "SEM ENROLAÇÃO"]
+      },
+      {
+        id: 4,
+        name: "Agente para Restaurantes com ChatGPT",
+        desc: "✅ Pedidos e reservas no automático<br>✅ Dúvidas do cardápio na hora<br>✅ Sugere combos (↑ ticket médio)<br><span style='color:#aaa'>Implantação (1x): <b style=\"color:#fff\">R$ 497</b></span>",
+        price: 297.00,
+        cat: "Agentes Inteligentes",
+        icon: "👨‍🍳",
+        tags: ["PEDIDOS", "RESERVAS", "AUMENTA TICKET"]
+      },
+      {
+        id: 5,
+        name: "Agente para Responder E-mails com ChatGPT",
+        desc: "✅ Separa e prioriza e-mails<br>✅ Resume o que importa<br>✅ Rascunho pronto pra aprovar<br><span style='color:#aaa'>Implantação (1x): <b style=\"color:#fff\">R$ 297</b></span>",
+        price: 197.00,
+        cat: "Agentes Inteligentes",
+        icon: "📩",
+        tags: ["TRIAGEM", "RESUMO", "RESPOSTA PRONTA"]
+      },
+    ];
 
-        <div style="text-align:center; color:#444; font-size:0.8rem; margin-top:20px; padding-top:20px;">
-            aprovados© 2026 • TODOS OS DIREITOS RESERVADOS
-        </div>
-    </footer>
+    // ✅ DÚVIDAS: comece com 4 e adicione mais quando quiser (só incluir novos objetos aqui)
+    const FAQ_DB = [
+      {
+        q: "Em quanto tempo fica pronto?",
+        a: "Na maioria dos casos, o piloto sai rápido. O tempo exato depende do volume de perguntas, integrações e validação do fluxo. Se você me disser seu cenário, eu te passo o prazo mais preciso."
+      },
+      {
+        q: "Funciona com WhatsApp normal ou precisa da API oficial?",
+        a: "Dá para começar de forma simples, e também evoluir para a API oficial quando precisar de escala, estabilidade e automação avançada. Eu te recomendo o caminho ideal conforme seu volume."
+      },
+      {
+        q: "O que eu preciso te enviar para treinar a IA?",
+        a: "O básico: suas perguntas frequentes, serviços, horários, regras e qualquer texto que já use com clientes. Com isso, eu monto a base inicial e ajusto com você até ficar natural."
+      },
+      {
+        q: "Tem mensalidade? O que está incluso?",
+        a: "Sim: mensalidade cobre manutenção, suporte e evolução do agente. A implantação é uma vez. Posso te indicar o plano mais adequado conforme seu volume e objetivo (atender, agendar, vender)."
+      }
+    ];
 
-    <a href="https://wa.me/5511916072188" target="_blank" class="float-btn"><div class="status-led"></div>RODRIGO ONLINE</a>
-    <div class="toast" id="toast">Item Adicionado!</div>
+    // Conteúdo dos Modais já existente
+    const MODAL_CONTENT = {
+      'quem_somos': `<p>A <strong>NEON COMMANDER CORP</strong> nasceu em 2018 com uma missão clara: eliminar o trabalho repetitivo. Somos um coletivo de engenheiros obcecados por eficiência e automação em escala.</p><p>Nossa infraestrutura processa milhões de eventos por dia. Não vendemos apenas scripts; vendemos tempo.</p>`,
+      'carreiras': `<p>Estamos em busca de mentes brilhantes.</p><ul><li>Senior Automation Engineer (Python)</li><li>Full Stack Developer (Next.js)</li><li>Prompt Engineer</li></ul><p>Envie seu CV para jobs@neonauto.com.</p>`,
+      'termos': `<p>1. <strong>Licença:</strong> Uso vitalício para um CNPJ.</p><p>2. <strong>Suporte:</strong> 30 dias inclusos.</p><p>3. <strong>Reembolso:</strong> Garantia de 7 dias.</p>`,
+      'status': `<p>Todos os sistemas operacionais.</p><p>API WhatsApp: <span style="color:#0f0">Online</span></p><p>OpenAI Gateway: <span style="color:#0f0">Online</span></p>`,
+      'help': `<p>Abra um ticket enviando email para help@neonauto.com ou chame no suporte via WhatsApp no canto da tela.</p>`
+    };
 
-    <script>
-        /**
-         * =========================================================
-         * ENGINE ENTERPRISE V10.0
-         * 1. Matrix Violet Intense Core
-         * 2. Upsell Queue Logic (Exact behavior requested)
-         * 3. Modal & Scroll Control
-         * =========================================================
-         */
+    // --- CLASSE MATRIX (existente) ---
+    class MatrixRain {
+      constructor() {
+        this.canvas = document.getElementById('matrix-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        this.characters = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        this.columns = this.canvas.width / 20;
+        this.drops = [];
+        for (let x = 0; x < this.columns; x++) this.drops[x] = 1;
+        window.addEventListener('resize', () => this.resize());
+        this.animate();
+      }
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        this.columns = this.canvas.width / 20;
+      }
+      animate() {
+        this.ctx.fillStyle = 'rgba(2, 2, 3, 0.08)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        const PRODUCTS_DB = [
-            { id: 1, name: "Atendente IA Whatsapp (GPT-4)", desc: "IA Treinada na sua base para responder 24/7.", price: 497.00, cat: "IA & Chatbots", icon: "🤖", tags: ["HOT", "IA"] },
-            { id: 2, name: "Sync Bling <-> Woocommerce", desc: "Sincronização de estoque e preços em tempo real.", price: 299.00, cat: "E-commerce", icon: "🛒", tags: ["ERP"] },
-            { id: 3, name: "Qualificador de Leads CRM", desc: "Typeform para Pipedrive com enriquecimento de dados.", price: 150.00, cat: "CRM & Vendas", icon: "🎯", tags: ["VENDAS"] },
-            { id: 4, name: "Cold Mail Machine", desc: "Infra de e-mail marketing com aquecimento de IP.", price: 350.00, cat: "Marketing", icon: "📧", tags: ["GROWTH"] },
-            { id: 5, name: "SEO Reporter Pro", desc: "Insights automáticos do GSC e Analytics em PDF.", price: 199.00, cat: "Dados", icon: "📊", tags: ["NEW"] },
-            { id: 6, name: "Agendador Inteligente", desc: "Bot que negocia horários no Google Calendar.", price: 120.00, cat: "IA & Chatbots", icon: "📅", tags: [] },
-            { id: 7, name: "Onboarding Automático", desc: "Gera contratos e cria pastas no Drive automaticamente.", price: 250.00, cat: "CRM & Vendas", icon: "🤝", tags: ["DOCS"] },
-            { id: 8, name: "Price Scraper Competitor", desc: "Monitora preços da concorrência e avisa no Slack.", price: 599.00, cat: "Dados", icon: "🕷️", tags: ["ADVANCED"] },
-            { id: 9, name: "Carrinho Abandonado Turbo", desc: "Fluxo multicanal para recuperar vendas perdidas.", price: 399.00, cat: "E-commerce", icon: "💰", tags: ["ROI"] },
-        ];
+        this.ctx.fillStyle = '#d500f9';
+        this.ctx.font = 'bold 15px monospace';
+        this.ctx.shadowBlur = 5;
+        this.ctx.shadowColor = '#d500f9';
 
-        // Conteúdo dos Modais
-        const MODAL_CONTENT = {
-            'quem_somos': `<p>A <strong>NEON COMMANDER CORP</strong> nasceu em 2018 com uma missão clara: eliminar o trabalho repetitivo. Somos um coletivo de engenheiros obcecados por eficiência e automação em escala.</p><p>Nossa infraestrutura processa milhões de eventos por dia. Não vendemos apenas scripts; vendemos tempo.</p>`,
-            'carreiras': `<p>Estamos em busca de mentes brilhantes.</p><ul><li>Senior Automation Engineer (Python)</li><li>Full Stack Developer (Next.js)</li><li>Prompt Engineer</li></ul><p>Envie seu CV para jobs@neonauto.com.</p>`,
-            'termos': `<p>1. <strong>Licença:</strong> Uso vitalício para um CNPJ.</p><p>2. <strong>Suporte:</strong> 30 dias inclusos.</p><p>3. <strong>Reembolso:</strong> Garantia de 7 dias.</p>`,
-            'status': `<p>Todos os sistemas operacionais.</p><p>API WhatsApp: <span style="color:#0f0">Online</span></p><p>OpenAI Gateway: <span style="color:#0f0">Online</span></p>`,
-            'help': `<p>Abra um ticket enviando email para help@neonauto.com ou chame no suporte via WhatsApp no canto da tela.</p>`
+        for (let i = 0; i < this.drops.length; i++) {
+          const text = this.characters.charAt(Math.floor(Math.random() * this.characters.length));
+          this.ctx.fillText(text, i * 20, this.drops[i] * 20);
+
+          if (this.drops[i] * 20 > this.canvas.height && Math.random() > 0.975) {
+            this.drops[i] = 0;
+          }
+          this.drops[i]++;
+        }
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+
+    // --- APP PRINCIPAL ---
+    class NeonStoreApp {
+      constructor() {
+        this.state = {
+          cart: this.loadCartSafe(),
+          filters: { search: '', categories: new Set(), price: 'all' },
+          upsellQueue: [],
+          faqActiveIndex: null
         };
+        this.init();
+      }
 
-        // --- CLASSE DO EFEITO MATRIX ROXO (INTENSO) ---
-        class MatrixRain {
-            constructor() {
-                this.canvas = document.getElementById('matrix-canvas');
-                this.ctx = this.canvas.getContext('2d');
-                this.resize();
-                this.characters = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                this.columns = this.canvas.width / 20;
-                this.drops = [];
-                for (let x = 0; x < this.columns; x++) this.drops[x] = 1;
-                window.addEventListener('resize', () => this.resize());
-                this.animate();
-            }
-            resize() {
-                this.canvas.width = window.innerWidth;
-                this.canvas.height = window.innerHeight;
-                this.columns = this.canvas.width / 20;
-            }
-            animate() {
-                // Fundo com leve rastro
-                this.ctx.fillStyle = 'rgba(2, 2, 3, 0.08)'; 
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-                
-                // Cor vibrante
-                this.ctx.fillStyle = '#d500f9'; 
-                this.ctx.font = 'bold 15px monospace';
-                this.ctx.shadowBlur = 5;
-                this.ctx.shadowColor = '#d500f9';
-                
-                for (let i = 0; i < this.drops.length; i++) {
-                    const text = this.characters.charAt(Math.floor(Math.random() * this.characters.length));
-                    this.ctx.fillText(text, i * 20, this.drops[i] * 20);
-                    
-                    if (this.drops[i] * 20 > this.canvas.height && Math.random() > 0.975) {
-                        this.drops[i] = 0;
-                    }
-                    this.drops[i]++;
-                }
-                requestAnimationFrame(() => this.animate());
-            }
+      init() {
+        this.renderFilters();
+        this.renderCatalog();
+        this.renderFAQ();            // ✅ ADICIONADO (DÚVIDAS)
+        this.bindFAQForm();          // ✅ ADICIONADO (FORM)
+        this.bindFAQModalClose();    // ✅ ADICIONADO (FECHAR MODAL)
+
+        this.updateCartUI();
+        this.setupBgCanvas();
+        new MatrixRain();
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+          this.state.filters.search = e.target.value.toLowerCase();
+          this.renderCatalog();
+        });
+      }
+
+      /* ============================
+         ✅ DÚVIDAS: RENDER + MODAL
+         ============================ */
+      renderFAQ(){
+        const list = document.getElementById('faq-list');
+        if(!list) return;
+
+        list.innerHTML = FAQ_DB.map((item, idx) => {
+          const hint = (item.a || "").trim().slice(0, 90);
+          const hintText = hint.length >= 90 ? hint + "..." : hint;
+
+          return `
+            <div class="faq-item" onclick="NeonStore.openFaqModal(${idx})">
+              <div class="faq-q">
+                <span>${item.q}</span>
+                <small>ABRIR</small>
+              </div>
+              <div class="faq-hint">${this.escapeHTML(hintText)}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      openFaqModal(idx){
+        const overlay = document.getElementById('faq-modal-overlay');
+        const title = document.getElementById('faq-modal-title');
+        const body = document.getElementById('faq-modal-body');
+        if(!overlay || !title || !body) return;
+
+        const item = FAQ_DB[idx];
+        if(!item) return;
+
+        this.state.faqActiveIndex = idx;
+        title.innerText = item.q;
+
+        // resposta em HTML seguro (texto puro)
+        body.innerHTML = `
+          <div style="color:#cfe8ff; font-weight:600; margin-bottom:10px;">
+            Resposta:
+          </div>
+          <div style="color:#c7d0f0;">
+            ${this.escapeHTML(item.a).replace(/\n/g, "<br>")}
+          </div>
+          <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); color:#8892b0; font-size:0.95rem;">
+            Se a sua dúvida for diferente, use o formulário abaixo para mandar direto no WhatsApp.
+          </div>
+        `;
+
+        overlay.classList.add('active');
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      closeFaqModal(){
+        const overlay = document.getElementById('faq-modal-overlay');
+        if(!overlay) return;
+        overlay.classList.remove('active');
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+
+      bindFAQModalClose(){
+        const overlay = document.getElementById('faq-modal-overlay');
+        if(!overlay) return;
+
+        // clicar fora fecha
+        overlay.addEventListener('click', (e) => {
+          if(e.target === overlay) this.closeFaqModal();
+        });
+
+        // ESC fecha
+        window.addEventListener('keydown', (e) => {
+          if(e.key === 'Escape') this.closeFaqModal();
+        });
+      }
+
+      bindFAQForm(){
+        const form = document.getElementById('faq-form');
+        if(!form) return;
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const nameEl = document.getElementById('faq-name');
+          const phoneEl = document.getElementById('faq-phone');
+          const questionEl = document.getElementById('faq-question');
+
+          const name = (nameEl?.value || "").trim();
+          const phoneRaw = (phoneEl?.value || "").trim();
+          const question = (questionEl?.value || "").trim();
+
+          if(name.length < 2) return alert("Informe seu nome.");
+          if(question.length < 5) return alert("Escreva sua dúvida.");
+          const phoneNormalized = this.normalizeBRPhone(phoneRaw);
+          if(!phoneNormalized) return alert("Informe um WhatsApp válido com DDD. Ex: (11) 99999-9999");
+
+          const when = new Date();
+          const payload = {
+            name,
+            phone: phoneNormalized,
+            question,
+            dateISO: when.toISOString(),
+            dateBR: when.toLocaleString('pt-BR'),
+            page: location.href
+          };
+
+          // 1) manda pro WhatsApp (imediato)
+          this.sendToWhatsApp(payload);
+
+          // 2) salva na planilha (silencioso; não bloqueia)
+          try {
+            await this.sendToSheets(payload);
+          } catch (err) {
+            // não interrompe nada: a função principal (WhatsApp) já foi feita
+            console.warn("Falha ao salvar na planilha:", err);
+          }
+
+          // feedback + limpar
+          this.toast("Enviado! ✅");
+          form.reset();
+        });
+      }
+
+      sendToWhatsApp(payload){
+        const msg =
+`📩 NOVA DÚVIDA (SITE)
+
+👤 Nome: ${payload.name}
+📱 Whats: ${payload.phone}
+🕒 Data: ${payload.dateBR}
+
+❓ Pergunta:
+${payload.question}`;
+
+        window.open(`https://wa.me/5511916072188?text=${encodeURIComponent(msg)}`, '_blank');
+      }
+
+      async sendToSheets(payload){
+        if(!GOOGLE_SHEETS_WEBAPP_URL || GOOGLE_SHEETS_WEBAPP_URL.includes("COLE_AQUI")) {
+          // se você ainda não colou a URL do Web App, não dá erro pro usuário
+          return;
         }
 
-        // --- APP PRINCIPAL ---
-        class NeonStoreApp {
-            constructor() {
-                this.state = {
-                    cart: this.loadCartSafe(), 
-                    filters: { search: '', categories: new Set(), price: 'all' },
-                    upsellQueue: [] // A FILA DE OFERTAS
-                };
-                this.init();
-            }
+        const res = await fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
 
-            init() {
-                this.renderFilters();
-                this.renderCatalog();
-                this.updateCartUI();
-                this.setupBgCanvas(); 
-                new MatrixRain(); 
-                
-                document.getElementById('search-input').addEventListener('input', (e) => {
-                    this.state.filters.search = e.target.value.toLowerCase();
-                    this.renderCatalog();
-                });
-            }
+        // Apps Script retorna JSON
+        const data = await res.json().catch(()=> ({}));
+        if(!res.ok || data?.ok !== true){
+          throw new Error(data?.error || "Falha ao gravar na planilha.");
+        }
+      }
 
-            // --- LÓGICA DE FILA DE UPSELL (QUEUE) ---
-            
-            // 1. Gera a fila inicial quando abre o carrinho
-            initUpsellQueue() {
-                const cartIds = new Set(this.state.cart.map(i => i.id));
-                // Pega tudo que NÃO está no carrinho
-                let potential = PRODUCTS_DB.filter(p => !cartIds.has(p.id));
-                // Embaralha
-                potential.sort(() => Math.random() - 0.5);
-                // Salva IDs na fila
-                this.state.upsellQueue = potential.map(p => p.id);
-            }
+      normalizeBRPhone(phone){
+        // pega só dígitos
+        const digits = (phone || "").replace(/\D/g, "");
+        // aceita:
+        // 11 dígitos (DDD + 9 dígitos) => assume BR +55
+        // 10 dígitos (DDD + 8 dígitos) => assume BR +55
+        // 13 dígitos começando com 55 => ok
+        if(digits.length === 13 && digits.startsWith("55")) return digits;
+        if(digits.length === 11 || digits.length === 10) return "55" + digits;
+        return null;
+      }
 
-            // 2. Renderiza os 2 primeiros itens da fila
-            renderUpsells() {
-                const section = document.getElementById('upsell-area');
-                const container = document.getElementById('upsell-list');
+      escapeHTML(str){
+        return String(str ?? "")
+          .replaceAll("&","&amp;")
+          .replaceAll("<","&lt;")
+          .replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;")
+          .replaceAll("'","&#039;");
+      }
 
-                // Se a fila tiver menos de 1 item, esconde a seção
-                if (this.state.upsellQueue.length === 0) {
-                    section.classList.remove('active');
-                    return;
-                }
+      /* ============================
+         UPSELL / CARRINHO (inalterado)
+         ============================ */
+      initUpsellQueue() {
+        const cartIds = new Set(this.state.cart.map(i => i.id));
+        let potential = PRODUCTS_DB.filter(p => !cartIds.has(p.id));
+        potential.sort(() => Math.random() - 0.5);
+        this.state.upsellQueue = potential.map(p => p.id);
+      }
 
-                // Pega os 2 primeiros (Indices 0 e 1)
-                const itemsToShow = this.state.upsellQueue.slice(0, 2);
-                
-                section.classList.add('active');
-                container.innerHTML = itemsToShow.map((id, index) => {
-                    const p = PRODUCTS_DB.find(prod => prod.id === id);
-                    if(!p) return '';
-                    const offerPrice = p.price * 0.85; // 15% OFF
-                    
-                    return `
-                    <div class="upsell-card">
-                        <div class="upsell-header">🔥 OFERTA ${index + 1}</div>
-                        <div style="font-size:0.8rem; color:#aaa; margin-bottom:5px;">${p.name}</div>
-                        <div style="font-size:0.8rem;">De <span style="text-decoration:line-through">R$ ${p.price}</span> por <span style="color:#fff; font-weight:bold">R$ ${offerPrice.toLocaleString('pt-BR')}</span></div>
-                        <button class="upsell-btn" onclick="NeonStore.acceptUpsell(${index}, ${p.id}, ${offerPrice})">ADICIONAR +</button>
-                    </div>`;
-                }).join('');
-            }
+      renderUpsells() {
+        const section = document.getElementById('upsell-area');
+        const container = document.getElementById('upsell-list');
 
-            // 3. Aceita uma oferta (Remove da fila e adiciona ao carrinho)
-            acceptUpsell(queueIndex, productId, price) {
-                // Adiciona ao carrinho
-                this.addUpsellToCart(productId, price);
-                
-                // Remove ESPECIFICAMENTE o item clicado da fila
-                // Se clicou no index 0, remove o 0. O 1 vira 0, o 2 vira 1.
-                // Se clicou no index 1, remove o 1. O 0 fica, o 2 vira 1.
-                this.state.upsellQueue.splice(queueIndex, 1);
-                
-                // Re-renderiza a fila imediatamente
-                this.renderUpsells();
-            }
-
-            // 4. Reseta a fila (quando fecha o carrinho)
-            resetUpsells() {
-                this.state.upsellQueue = [];
-            }
-
-            // --- FUNÇÕES BÁSICAS DO CARRINHO ---
-            loadCartSafe() {
-                try {
-                    const saved = localStorage.getItem('neon_cart_v10');
-                    return saved ? JSON.parse(saved) : [];
-                } catch (e) { return []; }
-            }
-            saveCart() {
-                localStorage.setItem('neon_cart_v10', JSON.stringify(this.state.cart));
-                this.updateCartUI();
-            }
-
-            updateCartUI() {
-                const container = document.getElementById('cart-content');
-                const countBadge = document.getElementById('cart-count');
-                const totalEl = document.getElementById('cart-total');
-                const upsellArea = document.getElementById('upsell-area');
-
-                const totalQty = this.state.cart.reduce((acc, i) => acc + i.qty, 0);
-                countBadge.innerText = totalQty;
-
-                if (this.state.cart.length === 0) {
-                    container.innerHTML = '<div style="text-align:center; color:#666; margin-top:20px;">Carrinho vazio.</div>';
-                    totalEl.innerText = 'R$ 0,00';
-                    upsellArea.classList.remove('active');
-                    this.resetUpsells(); // Garante reset se esvaziar
-                    return;
-                }
-
-                let totalVal = 0;
-                container.innerHTML = this.state.cart.map((item, idx) => {
-                    const itemTotal = item.price * item.qty;
-                    totalVal += itemTotal;
-                    return `
-                    <div class="cart-item">
-                        <div class="cart-item-top">
-                            <h4>${item.name} ${item.isDiscount ? '<span style="color:var(--gold); font-size:0.7rem">[OFF]</span>' : ''}</h4>
-                            <button class="item-remove" onclick="NeonStore.removeFromCart(${idx})">Remover</button>
-                        </div>
-                        <div class="cart-controls">
-                            <div class="qty-wrapper">
-                                <button class="qty-btn" onclick="NeonStore.changeQty(${idx}, -1)">-</button>
-                                <span style="color:#fff; font-weight:bold; width:20px; text-align:center;">${item.qty}</span>
-                                <button class="qty-btn" onclick="NeonStore.changeQty(${idx}, 1)">+</button>
-                            </div>
-                            <div style="color:var(--primary); font-weight:bold;">R$ ${itemTotal.toLocaleString('pt-BR')}</div>
-                        </div>
-                    </div>`;
-                }).join('');
-
-                totalEl.innerText = `R$ ${totalVal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-                
-                // NOTA: A renderização dos upsells é controlada pelo toggleCart e acceptUpsell, não aqui diretamente,
-                // para evitar recriação da fila indesejada.
-            }
-
-            addToCart(id) {
-                const product = PRODUCTS_DB.find(p => p.id === id);
-                const existing = this.state.cart.find(i => i.id === id && !i.isDiscount);
-                
-                if (existing) existing.qty++;
-                else this.state.cart.push({ ...product, qty: 1, isDiscount: false });
-                
-                this.saveCart();
-                this.toast("Produto Adicionado!");
-                this.toggleCart(true); 
-            }
-
-            addUpsellToCart(id, price) {
-                const product = PRODUCTS_DB.find(p => p.id === id);
-                this.state.cart.push({ ...product, price: price, qty: 1, isDiscount: true });
-                this.saveCart();
-                this.toast("Oferta Adicionada!");
-            }
-
-            removeFromCart(idx) {
-                this.state.cart.splice(idx, 1);
-                this.saveCart();
-                // Se o carrinho ficar vazio, reseta a lógica de upsell
-                if(this.state.cart.length === 0) this.resetUpsells();
-            }
-
-            changeQty(idx, delta) {
-                const item = this.state.cart[idx];
-                item.qty += delta;
-                if (item.qty <= 0) this.state.cart.splice(idx, 1);
-                this.saveCart();
-            }
-
-            toggleCart(forceOpen = false) {
-                const overlay = document.getElementById('overlay');
-                const isOpen = overlay.classList.contains('open');
-                
-                if (forceOpen || !isOpen) {
-                    // ABRINDO O CARRINHO
-                    overlay.classList.add('open');
-                    // Inicia a fila se ela estiver vazia (primeira abertura ou após reset)
-                    if (this.state.upsellQueue.length === 0) {
-                        this.initUpsellQueue();
-                    }
-                    this.renderUpsells();
-                } else {
-                    // FECHANDO O CARRINHO
-                    overlay.classList.remove('open');
-                    // Reseta a fila conforme solicitado ("Se o usuário sair... reiniciado do zero")
-                    this.resetUpsells();
-                }
-            }
-
-            // --- FILTROS & UI ---
-            getFilteredProducts() {
-                return PRODUCTS_DB.filter(p => {
-                    const matchText = p.name.toLowerCase().includes(this.state.filters.search) || p.desc.toLowerCase().includes(this.state.filters.search);
-                    const matchCat = this.state.filters.categories.size === 0 || this.state.filters.categories.has(p.cat);
-                    let matchPrice = true;
-                    if (this.state.filters.price === 'low') matchPrice = p.price < 200;
-                    if (this.state.filters.price === 'mid') matchPrice = p.price >= 200 && p.price <= 500;
-                    if (this.state.filters.price === 'high') matchPrice = p.price > 500;
-                    return matchText && matchCat && matchPrice;
-                });
-            }
-
-            renderCatalog() {
-                const grid = document.getElementById('product-grid');
-                const products = this.getFilteredProducts();
-                if (products.length === 0) { grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px; color:#666;">Nenhum resultado encontrado.</div>`; return; }
-                grid.innerHTML = products.map(p => `
-                    <div class="product-card">
-                        <div class="card-header"><div class="node-icon">${p.icon}</div></div>
-                        <div class="card-body">
-                            <div class="prod-cat">${p.cat}</div>
-                            <h3 class="prod-title">${p.name}</h3>
-                            <div class="tech-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-                            <p class="prod-desc">${p.desc}</p>
-                            <div class="card-footer">
-                                <div class="price-display">R$ ${p.price.toLocaleString('pt-BR')}</div>
-                                <button class="btn-add-cart" onclick="NeonStore.addToCart(${p.id})">+</button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            renderFilters() {
-                const cats = [...new Set(PRODUCTS_DB.map(p => p.cat))];
-                document.getElementById('filter-cats-container').innerHTML = cats.map(c => `<label><input type="checkbox" value="${c}" hidden onchange="NeonStore.toggleCatFilter(this)"><span class="custom-check"></span> ${c}</label>`).join('');
-            }
-            toggleCatFilter(el) { if (el.checked) this.state.filters.categories.add(el.value); else this.state.filters.categories.delete(el.value); this.renderCatalog(); }
-            applyFilters() { const radio = document.querySelector('input[name="price"]:checked'); this.state.filters.price = radio ? radio.value : 'all'; this.renderCatalog(); }
-            resetFilters() { this.state.filters.search = ''; this.state.filters.categories.clear(); this.state.filters.price = 'all'; document.getElementById('search-input').value = ''; document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false); document.querySelector('input[value="all"]').checked = true; this.renderCatalog(); }
-            toggleFilters() { document.getElementById('sidebar-filters').classList.toggle('active'); }
-            toast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
-            openModal(key) { const m = document.getElementById('info-modal'); document.getElementById('modal-title').innerText = (key==='quem_somos'?'QUEM SOMOS':key==='carreiras'?'CARREIRAS':key==='termos'?'TERMOS':'SUPORTE'); document.getElementById('modal-body').innerHTML = MODAL_CONTENT[key]||''; m.classList.add('active'); }
-            closeModal() { document.getElementById('info-modal').classList.remove('active'); }
-            checkout() { if(this.state.cart.length === 0) return alert("Carrinho vazio!"); let msg = "*PEDIDO NEON AUTOMATIONS*\n\n"; let total = 0; this.state.cart.forEach(i => { total += i.price * i.qty; msg += `🔹 ${i.qty}x ${i.name} ${i.isDiscount?'[OFF]':''} | R$ ${(i.price*i.qty).toFixed(2)}\n`; }); msg += `\n*TOTAL: R$ ${total.toFixed(2)}*`; window.open(`https://wa.me/5511916072188?text=${encodeURIComponent(msg)}`, '_blank'); }
-
-            setupBgCanvas() { const cvs = document.getElementById('canvas-bg'); const ctx = cvs.getContext('2d'); let w, h, particles = []; const resize = () => { w = cvs.width = window.innerWidth; h = cvs.height = window.innerHeight; }; window.addEventListener('resize', resize); resize(); class P { constructor() { this.reset(); } reset() { this.x = Math.random()*w; this.y = Math.random()*h; this.vx = (Math.random()-.5)*.5; this.vy = (Math.random()-.5)*.5; } update() { this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>w||this.y<0||this.y>h) this.reset(); } draw() { ctx.fillStyle='rgba(0,255,157,0.3)'; ctx.beginPath(); ctx.arc(this.x,this.y,1,0,Math.PI*2); ctx.fill(); } } for(let i=0; i<60; i++) particles.push(new P()); const anim = () => { ctx.clearRect(0,0,w,h); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); }; anim(); }
+        if (this.state.upsellQueue.length === 0) {
+          section.classList.remove('active');
+          return;
         }
 
-        const NeonStore = new NeonStoreApp();
-    </script>
+        const itemsToShow = this.state.upsellQueue.slice(0, 2);
+
+        section.classList.add('active');
+        container.innerHTML = itemsToShow.map((id, index) => {
+          const p = PRODUCTS_DB.find(prod => prod.id === id);
+          if(!p) return '';
+          const offerPrice = p.price * 0.85;
+
+          return `
+            <div class="upsell-card">
+              <div class="upsell-header">🔥 OFERTA ${index + 1}</div>
+              <div style="font-size:0.8rem; color:#aaa; margin-bottom:5px;">${p.name}</div>
+              <div style="font-size:0.8rem;">
+                De <span style="text-decoration:line-through">R$ ${p.price.toLocaleString('pt-BR')}</span>
+                por <span style="color:#fff; font-weight:bold">R$ ${offerPrice.toLocaleString('pt-BR')}</span>
+              </div>
+              <button class="upsell-btn" onclick="NeonStore.acceptUpsell(${index}, ${p.id}, ${offerPrice})">ADICIONAR +</button>
+            </div>`;
+        }).join('');
+      }
+
+      acceptUpsell(queueIndex, productId, price) {
+        this.addUpsellToCart(productId, price);
+        this.state.upsellQueue.splice(queueIndex, 1);
+        this.renderUpsells();
+      }
+
+      resetUpsells() {
+        this.state.upsellQueue = [];
+      }
+
+      loadCartSafe() {
+        try {
+          const saved = localStorage.getItem('neon_cart_v10');
+          return saved ? JSON.parse(saved) : [];
+        } catch (e) { return []; }
+      }
+      saveCart() {
+        localStorage.setItem('neon_cart_v10', JSON.stringify(this.state.cart));
+        this.updateCartUI();
+      }
+
+      updateCartUI() {
+        const container = document.getElementById('cart-content');
+        const countBadge = document.getElementById('cart-count');
+        const totalEl = document.getElementById('cart-total');
+        const upsellArea = document.getElementById('upsell-area');
+
+        const totalQty = this.state.cart.reduce((acc, i) => acc + i.qty, 0);
+        countBadge.innerText = totalQty;
+
+        if (this.state.cart.length === 0) {
+          container.innerHTML = '<div style="text-align:center; color:#666; margin-top:20px;">Carrinho vazio.</div>';
+          totalEl.innerText = 'R$ 0,00';
+          upsellArea.classList.remove('active');
+          this.resetUpsells();
+          return;
+        }
+
+        let totalVal = 0;
+        container.innerHTML = this.state.cart.map((item, idx) => {
+          const itemTotal = item.price * item.qty;
+          totalVal += itemTotal;
+          return `
+            <div class="cart-item">
+              <div class="cart-item-top">
+                <h4>${item.name} ${item.isDiscount ? '<span style="color:var(--gold); font-size:0.7rem">[OFF]</span>' : ''}</h4>
+                <button class="item-remove" onclick="NeonStore.removeFromCart(${idx})">Remover</button>
+              </div>
+              <div class="cart-controls">
+                <div class="qty-wrapper">
+                  <button class="qty-btn" onclick="NeonStore.changeQty(${idx}, -1)">-</button>
+                  <span style="color:#fff; font-weight:bold; width:20px; text-align:center;">${item.qty}</span>
+                  <button class="qty-btn" onclick="NeonStore.changeQty(${idx}, 1)">+</button>
+                </div>
+                <div style="color:var(--primary); font-weight:bold;">R$ ${itemTotal.toLocaleString('pt-BR')}</div>
+              </div>
+            </div>`;
+        }).join('');
+
+        totalEl.innerText = `R$ ${totalVal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+      }
+
+      addToCart(id) {
+        const product = PRODUCTS_DB.find(p => p.id === id);
+        const existing = this.state.cart.find(i => i.id === id && !i.isDiscount);
+
+        if (existing) existing.qty++;
+        else this.state.cart.push({ ...product, qty: 1, isDiscount: false });
+
+        this.saveCart();
+        this.toast("Produto Adicionado!");
+        this.toggleCart(true);
+      }
+
+      addUpsellToCart(id, price) {
+        const product = PRODUCTS_DB.find(p => p.id === id);
+        this.state.cart.push({ ...product, price: price, qty: 1, isDiscount: true });
+        this.saveCart();
+        this.toast("Oferta Adicionada!");
+      }
+
+      removeFromCart(idx) {
+        this.state.cart.splice(idx, 1);
+        this.saveCart();
+        if(this.state.cart.length === 0) this.resetUpsells();
+      }
+
+      changeQty(idx, delta) {
+        const item = this.state.cart[idx];
+        item.qty += delta;
+        if (item.qty <= 0) this.state.cart.splice(idx, 1);
+        this.saveCart();
+      }
+
+      toggleCart(forceOpen = false) {
+        const overlay = document.getElementById('overlay');
+        const isOpen = overlay.classList.contains('open');
+
+        if (forceOpen || !isOpen) {
+          overlay.classList.add('open');
+          if (this.state.upsellQueue.length === 0) this.initUpsellQueue();
+          this.renderUpsells();
+        } else {
+          overlay.classList.remove('open');
+          this.resetUpsells();
+        }
+      }
+
+      // ✅ BOTÃO GRANDE: "Quero isso no meu Whats" (cards)
+      whatsProduct(id) {
+        const p = PRODUCTS_DB.find(prod => prod.id === id);
+        if(!p) return;
+
+        const msg =
+`Quero esse agente no meu Whats ✅
+
+Produto: ${p.name}
+Mensalidade: R$ ${p.price.toLocaleString('pt-BR')}/mês
+
+Pode me explicar o melhor plano pro meu volume e como funciona a implantação?`;
+
+        window.open(`https://wa.me/5511916072188?text=${encodeURIComponent(msg)}`, '_blank');
+      }
+
+      // --- FILTROS & UI ---
+      getFilteredProducts() {
+        return PRODUCTS_DB.filter(p => {
+          const matchText = p.name.toLowerCase().includes(this.state.filters.search) || p.desc.toLowerCase().includes(this.state.filters.search);
+          const matchCat = this.state.filters.categories.size === 0 || this.state.filters.categories.has(p.cat);
+          let matchPrice = true;
+          if (this.state.filters.price === 'low') matchPrice = p.price < 200;
+          if (this.state.filters.price === 'mid') matchPrice = p.price >= 200 && p.price <= 500;
+          if (this.state.filters.price === 'high') matchPrice = p.price > 500;
+          return matchText && matchCat && matchPrice;
+        });
+      }
+
+      renderCatalog() {
+        const grid = document.getElementById('product-grid');
+        const products = this.getFilteredProducts();
+        if (products.length === 0) {
+          grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px; color:#666;">Nenhum resultado encontrado.</div>`;
+          return;
+        }
+
+        grid.innerHTML = products.map(p => `
+          <div class="product-card">
+            <div class="card-header"><div class="node-icon">${p.icon}</div></div>
+            <div class="card-body">
+              <div class="prod-cat">${p.cat}</div>
+              <h3 class="prod-title">${p.name}</h3>
+
+              <div class="tech-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+
+              <p class="prod-desc">${p.desc}</p>
+
+              <div class="card-footer">
+                <div class="price-display">Mensal: R$ ${p.price.toLocaleString('pt-BR')}/mês</div>
+                <button class="btn-add-cart" onclick="NeonStore.addToCart(${p.id})">+</button>
+              </div>
+
+              <button class="btn-whats-cta" onclick="NeonStore.whatsProduct(${p.id})">
+                <span class="wa-dot"></span>
+                Quero isso no meu Whats
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      renderFilters() {
+        const cats = [...new Set(PRODUCTS_DB.map(p => p.cat))];
+        document.getElementById('filter-cats-container').innerHTML =
+          cats.map(c => `<label><input type="checkbox" value="${c}" hidden onchange="NeonStore.toggleCatFilter(this)"><span class="custom-check"></span> ${c}</label>`).join('');
+      }
+
+      toggleCatFilter(el) {
+        if (el.checked) this.state.filters.categories.add(el.value);
+        else this.state.filters.categories.delete(el.value);
+        this.renderCatalog();
+      }
+
+      applyFilters() {
+        const radio = document.querySelector('input[name="price"]:checked');
+        this.state.filters.price = radio ? radio.value : 'all';
+        this.renderCatalog();
+      }
+
+      resetFilters() {
+        this.state.filters.search = '';
+        this.state.filters.categories.clear();
+        this.state.filters.price = 'all';
+        document.getElementById('search-input').value = '';
+        document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+        document.querySelector('input[value="all"]').checked = true;
+        this.renderCatalog();
+      }
+
+      toggleFilters() {
+        document.getElementById('sidebar-filters').classList.toggle('active');
+      }
+
+      toast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2000);
+      }
+
+      openModal(key) {
+        const m = document.getElementById('info-modal');
+        document.getElementById('modal-title').innerText =
+          (key==='quem_somos'?'QUEM SOMOS':key==='carreiras'?'CARREIRAS':key==='termos'?'TERMOS':'SUPORTE');
+        document.getElementById('modal-body').innerHTML = MODAL_CONTENT[key]||'';
+        m.classList.add('active');
+      }
+
+      closeModal() {
+        document.getElementById('info-modal').classList.remove('active');
+      }
+
+      checkout() {
+        if(this.state.cart.length === 0) return alert("Carrinho vazio!");
+        let msg = "*PEDIDO NEON AUTOMATIONS* (mensalidades)\n\n";
+        let total = 0;
+        this.state.cart.forEach(i => {
+          total += i.price * i.qty;
+          msg += `🔹 ${i.qty}x ${i.name} ${i.isDiscount?'[OFF]':''} | R$ ${(i.price*i.qty).toFixed(2)}\n`;
+        });
+        msg += `\n*TOTAL MENSAL (estimado): R$ ${total.toFixed(2)}*`;
+        msg += `\n\nMe explica a implantação e o melhor plano pro meu volume?`;
+        window.open(`https://wa.me/5511916072188?text=${encodeURIComponent(msg)}`, '_blank');
+      }
+
+      setupBgCanvas() {
+        const cvs = document.getElementById('canvas-bg');
+        const ctx = cvs.getContext('2d');
+        let w, h, particles = [];
+        const resize = () => { w = cvs.width = window.innerWidth; h = cvs.height = window.innerHeight; };
+        window.addEventListener('resize', resize);
+        resize();
+
+        class P {
+          constructor() { this.reset(); }
+          reset() { this.x = Math.random()*w; this.y = Math.random()*h; this.vx = (Math.random()-.5)*.5; this.vy = (Math.random()-.5)*.5; }
+          update() { this.x+=this.vx; this.y+=this.vy; if(this.x<0||this.x>w||this.y<0||this.y>h) this.reset(); }
+          draw() { ctx.fillStyle='rgba(0,255,157,0.3)'; ctx.beginPath(); ctx.arc(this.x,this.y,1,0,Math.PI*2); ctx.fill(); }
+        }
+        for(let i=0; i<60; i++) particles.push(new P());
+        const anim = () => { ctx.clearRect(0,0,w,h); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); };
+        anim();
+      }
+    }
+
+    const NeonStore = new NeonStoreApp();
+  </script>
 </body>
 </html>
-
